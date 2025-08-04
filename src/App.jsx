@@ -15,20 +15,23 @@ export const goodsFromServer = [
   'Garlic',
 ];
 
+const SORT_FIELD_NAME = 'name';
+const SORT_FIELD_LENGTH = 'length';
+
 function getPrepGoods(goods, sortField) {
   const prepGoods = [...goods];
 
-  if (sortField) {
-    prepGoods.sort((goods1, goods2) => {
-      switch (sortField) {
-        case 'Sort alphabetically':
-          return goods1.localeCompare(goods2);
-        case 'Sort by length':
-          return goods1.length - goods2.length;
-        default:
-          return 0;
-      }
-    });
+  switch (sortField) {
+    case SORT_FIELD_NAME:
+      prepGoods.sort((a, b) => a.localeCompare(b));
+      break;
+
+    case SORT_FIELD_LENGTH:
+      prepGoods.sort((a, b) => a.length - b.length);
+      break;
+
+    default:
+      break;
   }
 
   return prepGoods;
@@ -40,7 +43,7 @@ export const App = () => {
   const [reversed, setReversed] = useState(false);
 
   if (reversed) {
-    visibleGoods = visibleGoods.toReversed();
+    visibleGoods = visibleGoods.slice().reverse();
   }
 
   return (
@@ -48,18 +51,18 @@ export const App = () => {
       <div className="buttons">
         <button
           type="button"
-          className={`button is-info ${sortField === 'Sort alphabetically' ? '' : 'is-light'}`}
+          className={`button is-info ${sortField === SORT_FIELD_NAME ? '' : 'is-light'}`}
           onClick={() => {
-            setSortField('Sort alphabetically');
+            setSortField(SORT_FIELD_NAME);
           }}
         >
           Sort alphabetically
         </button>
         <button
           type="button"
-          className={`button is-success ${sortField === 'Sort by length' ? '' : 'is-light'}`}
+          className={`button is-success ${sortField === SORT_FIELD_LENGTH ? '' : 'is-light'}`}
           onClick={() => {
-            setSortField('Sort by length');
+            setSortField(SORT_FIELD_LENGTH);
           }}
         >
           Sort by length
